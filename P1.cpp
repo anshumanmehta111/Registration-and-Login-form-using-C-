@@ -18,10 +18,10 @@ int main(){
     cout<<"\n 1- Login";
     cout<<"\n 2- Sign Up";
     cout<<"\n 3- Forgot Password";
-    cout<<"\n 4- Exit";
+    cout<<"\n 4- Exit" <<endl;
     cout<<"Enter your choice : ";
-
     cin>>choice;
+    cin.ignore();
      switch(choice){
         case '1':
         obj.login();
@@ -42,67 +42,68 @@ int main(){
     return 0;
 }
 void temp :: SignUp(){
-    cout<<"Enter your User Name - "<<endl;
+    cout<<"Enter your User Name - ";
     getline(cin,UserName);
-    cout<<"Enter your Email "<<endl;
+    cout<<"Enter your Email - ";
     getline(cin,Email);
-    cout<<"ENter your Password "<<endl;
+    cout<<"Enter your Password - ";
     getline(cin,Password);
 
     file.open("loginData.txt",ios :: out | ios::app);
     file<<UserName<<"*"<<Email<<"*"<<Password<<endl;
     file.close();
+    cout<<"SignUp Successfully"<<endl;
 }
 
 void temp :: login(){
     
-    cout<<"Enter Your UserName "<<endl;
+    cout<<"Enter Your UserName ";
     getline(cin,searchName);
-    cout<<"Enter Your Password  "<<endl;
+    cout<<"Enter Your Password  ";
     getline(cin,pass);
+    bool found=false;
     file.open("loginData.txt",ios :: in);
-    getline(file,UserName,'*');
-    getline(file,Email,'*');
-    getline(file,Password,'\n');
-    while(!file.eof()){
+    while(getline(file,UserName,'*')){
+        getline(file,Email,'*');
+        getline(file,Password,'\n');
         if(UserName==searchName){
+            found=true;
             if(Password==pass){
                 cout<<"Login successful "<<endl;
             }
             else{
                 cout<<"Password is incorrect... "<<endl;
             }
+            break;   
         }
-    getline(file,UserName,'*');
-    getline(file,Email,'*');
-    getline(file,Password,'\n');
+    }
+    if(!found){
+        cout<<"UserName not found "<<endl;
     }
     file.close();
 }
     void temp :: ForgotPassword(){
-        cout<<"Enter your username : "<<endl;
+        cout<<"Enter your username : ";
         getline(cin,searchName);
-        cout<<"Enter your email : "<<endl;
-        getline(cin,Email);
+        cout<<"Enter your email : ";
+        getline(cin,searchEmail);
+        bool found=false;
 
         file.open("loginData.txt",ios::in);
-        getline(file,UserName,'*');
-        getline(file,Email,'*');
-        getline(file,Password,'\n');
-
-        while(!file.eof()){
-            if(UserName==searchName){
-                if(Email==searchEmail){
+        
+        while(getline(file,UserName,'*')){
+            getline(file,Email,'*');
+            getline(file,Password,'\n');
+            if(UserName==searchName && Email==searchEmail ){
+                found=true;
                     cout<<"Account found "<<endl;
                     cout<<"Your password is "<<Password<<endl;
-
-                }else{
-                    cout<<"Account not found "<<endl;
+                    break;
                 }
-            }else{
-                    cout<<"Account not found "<<endl;
-                }
+            }
 
+            if(!found){
+            cout<<"No User Found";
         }
         file.close();
 
